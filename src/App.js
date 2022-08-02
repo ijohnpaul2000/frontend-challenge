@@ -1,24 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
-
+import { PokemonProvider } from "./context/pokemonContext";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import SharedLayout from "./layouts/SharedLayout";
+import Homepage from "./pages/Homepage";
+import SinglePokemon from "./components/SinglePokemon";
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <PokemonProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<SharedLayout />}>
+            <Route path="/" element={<Homepage />} />
+            <Route path="/pokemon/:name" element={<SinglePokemon />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </PokemonProvider>
   );
 }
 
