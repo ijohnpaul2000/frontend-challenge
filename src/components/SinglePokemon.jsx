@@ -8,12 +8,13 @@ const SinglePokemon = () => {
   const { name } = useParams();
   const { singlePokemon, loading, error, fetchSinglePokemon } = usePokemon();
 
-  console.log(singlePokemon?.stats.base_stat);
   const statsColor = ["#D63944", "#FDA827", "#0089DF", "#8DB1C4", "#3A8B3E"];
   const pokemonName =
     singlePokemon?.name.charAt(0).toUpperCase() + singlePokemon?.name.slice(1);
 
   const pokemonImage = singlePokemon?.sprites.other.dream_world.front_default;
+
+  //* POKEMON TYPE
   const pokemonType = singlePokemon?.types.map((type) => (
     <div key={type.type.name}>
       <p
@@ -23,6 +24,8 @@ const SinglePokemon = () => {
       </p>
     </div>
   ));
+
+  //* POKEMON ABILITIES
   const pokemonAbilities = singlePokemon?.abilities.map((ability) => (
     <div key={ability.ability.name}>
       <p

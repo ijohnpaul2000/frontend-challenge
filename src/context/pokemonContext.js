@@ -4,7 +4,7 @@ import {
   useContext,
   useEffect,
   useReducer,
-  useState,
+  useRef,
 } from "react";
 import { initialState, pokemonReducer } from "./reducers/pokemonReducer";
 
@@ -13,8 +13,7 @@ const PokemonContext = createContext(null);
 const URL = "https://pokeapi.co/api/v2/pokemon/" || process.env.POKEMON_URL;
 export const PokemonProvider = ({ children }) => {
   const [state, dispatch] = useReducer(pokemonReducer, initialState);
-  //* made a piece of state, because useReducer arrays are not iterable.
-  const [allPokemons, setAllPokemons] = useState([]);
+  const effectRan = useRef(false);
 
   const config = {
     headers: {
@@ -30,17 +29,18 @@ export const PokemonProvider = ({ children }) => {
     try {
       const response = await axios(config);
       //* Set the reducer  with the response data
-      dispatch({ type: "FETCH_POKEMON_FULFILL", payload: response.data });
 
       //* Set all pokemons stats and etc.
       const createPokemonObject = (result) => {
         result.forEach(async (pokemon) => {
           const response = await axios(URL + pokemon.name);
-          setAllPokemons((prevList) => [...prevList, response.data]);
+          dispatch({
+            type: "FETCH_POKEMON_FULFILL",
+            payload: response.data,
+          });
         });
       };
       createPokemonObject(response.data.results);
-      await console.log(allPokemons);
     } catch (error) {
       dispatch({ type: "FETCH_POKEMON_REJECT", payload: error });
     }
@@ -60,6 +60,17 @@ export const PokemonProvider = ({ children }) => {
     }
   };
 
+  useEffect(() => {
+    if (effectRan.current === false) {
+      fetchAllPokemon();
+      console.log("effect ran");
+
+      return () => {
+        effectRan.current = true;
+      };
+    }
+  }, []);
+
   const value = {
     pokemon: state.pokemon,
     loading: state.loading,
@@ -67,7 +78,6 @@ export const PokemonProvider = ({ children }) => {
     singlePokemon: state.singlePokemon,
     fetchAllPokemon,
     fetchSinglePokemon,
-    allPokemons,
   };
 
   return (

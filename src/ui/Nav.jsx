@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 const Nav = () => {
   return (
-    <header className="w-full h-[80px] bg-[#703B58] px-4">
+    <header className="w-full h-[80px] bg-red-500 px-4">
       <nav className="max-w-[1400px] h-full mx-auto flex items-center">
         <Link
           to="/"

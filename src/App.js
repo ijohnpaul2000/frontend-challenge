@@ -4,6 +4,7 @@ import SharedLayout from "./layouts/SharedLayout";
 import Homepage from "./pages/Homepage";
 import SinglePokemon from "./components/SinglePokemon";
 import NotFound from "./pages/NotFound";
+
 function App() {
   return (
     <PokemonProvider>
