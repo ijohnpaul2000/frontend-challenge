@@ -12,14 +12,14 @@ export const pokemonReducer = (state, action) => {
         ...state,
         loading: true,
       };
-    case "FETCH_POKEMON_FULFILL":
+    case "FETCH_POKEMON_FULFILLED":
       return {
         ...state,
         pokemon: [...state.pokemon, action.payload],
         loading: false,
         error: null,
       };
-    case "FETCH_POKEMON_REJECT":
+    case "FETCH_POKEMON_REJECTED":
       return {
         pokemon: [],
         singlePokemon: null,
@@ -31,14 +31,14 @@ export const pokemonReducer = (state, action) => {
         ...state,
         loading: true,
       };
-    case "FETCH_SINGLE_POKEMON_FULFILL":
+    case "FETCH_SINGLE_POKEMON_FULFILLED":
       return {
         ...state,
         singlePokemon: action.payload,
         loading: false,
         error: null,
       };
-    case "FETCH_SINGLE_POKEMON_REJECT":
+    case "FETCH_SINGLE_POKEMON_REJECTED":
       return {
         ...state,
         singlePokemon: null,

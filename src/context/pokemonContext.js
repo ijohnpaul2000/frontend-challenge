@@ -23,6 +23,12 @@ export const PokemonProvider = ({ children }) => {
     method: "GET",
   };
 
+  const getPokemon = async (pokemonName) => {
+    return await (
+      await axios(URL + pokemonName)
+    ).data;
+  };
+
   const fetchAllPokemon = async () => {
     dispatch({ type: "FETCH_POKEMON_PENDING" });
 
@@ -31,18 +37,16 @@ export const PokemonProvider = ({ children }) => {
       //* Set the reducer  with the response data
 
       //* Set all pokemons stats and etc.
-      const createPokemonObject = (result) => {
-        result.forEach(async (pokemon) => {
-          const response = await axios(URL + pokemon.name);
-          dispatch({
-            type: "FETCH_POKEMON_FULFILL",
-            payload: response.data,
-          });
-        });
+      const createPokemonObject = async (results) => {
+        for (const result in results) {
+          const pokemons = await getPokemon(results[result].name);
+          dispatch({ type: "FETCH_POKEMON_FULFILLED", payload: pokemons });
+          console.log(result);
+        }
       };
       createPokemonObject(response.data.results);
     } catch (error) {
-      dispatch({ type: "FETCH_POKEMON_REJECT", payload: error });
+      dispatch({ type: "FETCH_POKEMON_REJECTED", payload: error });
     }
   };
 
@@ -52,11 +56,11 @@ export const PokemonProvider = ({ children }) => {
     try {
       const response = await axios(URL + name);
       dispatch({
-        type: "FETCH_SINGLE_POKEMON_FULFILL",
+        type: "FETCH_SINGLE_POKEMON_FULFILLED",
         payload: response.data,
       });
     } catch (error) {
-      dispatch({ type: "FETCH_SINGLE_POKEMON_REJECT", payload: error });
+      dispatch({ type: "FETCH_SINGLE_POKEMON_REJECTED", payload: error });
     }
   };
 
